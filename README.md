@@ -1,26 +1,4 @@
-# Sistem Informasi Inventory
-
-## Panduan Push ke GitHub (Untuk Pemilik Project)
-Jika ini pertama kali kamu mengupload project ini ke GitHub, ikuti langkah berikut:
-
-1.  **Buat Repository Baru**: Buka GitHub, buat repository baru (pilih "Public" atau "Private"), jangan centang "Add a README".
-2.  **Buka Terminal**: Buka CMD atau Git Bash di folder project ini.
-3.  **Jalankan Perintah**:
-    ```bash
-    git init
-    git add .
-    git commit -m "Upload pertama sistem inventory"
-    
-    # Ganti URL di bawah dengan URL repository GitHub barumu
-    git remote add origin https://github.com/USERNAME_GITHUB/NAMA_REPO.git
-    
-    git push -u origin main
-    ```
-    *Catatan: Folder `vendor`, `node_modules`, dan file `.env` otomatis DIBAIKAN oleh git (tidak akan terupload) agar repository tetap bersih dan aman.*
-
----
-
-## Panduan Instalasi (Untuk Teman/Developer Baru)
+## Panduan Instalasi 
 Ikuti panduan ini jika kamu baru pertama kali menjalankan project ini di komputermu.
 
 ### 1. Prasyarat (Wajib Install Dulu)
