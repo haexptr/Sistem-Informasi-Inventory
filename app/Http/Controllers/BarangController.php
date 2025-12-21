@@ -11,9 +11,17 @@ use BaconQrCode\Writer;
 
 class BarangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $barang = Barang::all();
+        // Check if filter is active
+        if ($request->get('filter') == 'menipis') {
+            // Only show items with stock less than 10
+            $barang = Barang::where('stok_sekarang', '<', 10)->get();
+        } else {
+            // Show all items
+            $barang = Barang::all();
+        }
+        
         return view('barang.index', compact('barang'));
     }
 
