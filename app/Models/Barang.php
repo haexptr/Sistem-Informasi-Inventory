@@ -16,6 +16,7 @@ class Barang extends Model
         'stok_sekarang',
         'qr_code',
         'keterangan',
+        'tanggal'
     ];
 
     public function transaksiMasuk()

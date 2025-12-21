@@ -13,6 +13,12 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// Fallback untuk logout via GET (Sidebar Menu AdminLTE)
+Route::get('/logout', function() {
+    Auth::logout();
+    return redirect('/login');
+});
+
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {

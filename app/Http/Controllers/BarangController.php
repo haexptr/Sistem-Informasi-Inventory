@@ -30,6 +30,7 @@ class BarangController extends Controller
             'stok_sekarang' => 'required|numeric|min:0',
             'kategori' => 'nullable',
             'keterangan' => 'nullable',
+            'tanggal' => 'nullable|date',
         ]);
 
         // Generate Kode Barang
@@ -57,6 +58,7 @@ class BarangController extends Controller
             'stok_sekarang' => $request->stok_sekarang,
             'kategori' => $request->kategori,
             'keterangan' => $request->keterangan,
+            'tanggal' => $request->tanggal,
             'qr_code' => 'qrcodes/' . $qr_filename,
         ]);
 
@@ -65,7 +67,28 @@ class BarangController extends Controller
 
     public function show(Barang $barang)
     {
-        return view('barang.show', compact('barang'));
+        if ($barang->kode_barang && (! $barang->qr_code || ! file_exists(public_path($barang->qr_code)))) {
+            if (!file_exists(public_path('qrcodes'))) {
+                mkdir(public_path('qrcodes'), 0755, true);
+            }
+            
+            $renderer = new ImageRenderer(
+                new RendererStyle(200),
+                new SvgImageBackEnd()
+            );
+            $writer = new Writer($renderer);
+            $qr_filename = $barang->kode_barang . '.svg';
+            $writer->writeFile($barang->kode_barang, public_path('qrcodes/' . $qr_filename));
+            
+            $barang->update(['qr_code' => 'qrcodes/' . $qr_filename]);
+        }
+
+        $qrCodeContent = '';
+        if ($barang->qr_code && file_exists(public_path($barang->qr_code))) {
+             $qrCodeContent = file_get_contents(public_path($barang->qr_code));
+        }
+
+        return view('barang.show', compact('barang', 'qrCodeContent'));
     }
 
     public function edit(Barang $barang)
@@ -81,6 +104,7 @@ class BarangController extends Controller
             'stok_sekarang' => 'required|numeric|min:0',
             'kategori' => 'nullable',
             'keterangan' => 'nullable',
+            'tanggal' => 'nullable|date',
         ]);
 
         $barang->update($request->all());

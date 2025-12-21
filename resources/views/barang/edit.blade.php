@@ -25,6 +25,10 @@
                     <input type="text" name="satuan" class="form-control" value="{{ $barang->satuan }}" required>
                 </div>
                 <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" name="tanggal" class="form-control" value="{{ $barang->tanggal }}">
+                </div>
+                <div class="form-group">
                     <label>Stok Sekarang</label>
                     <input type="number" name="stok_sekarang" class="form-control" value="{{ $barang->stok_sekarang }}" min="0" required>
                 </div>

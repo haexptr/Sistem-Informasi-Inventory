@@ -64,7 +64,7 @@ return [
     */
 
     'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo_img' => 'https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -110,7 +110,7 @@ return [
     */
 
     'preloader' => [
-        'enabled' => true,
+        'enabled' => false,
         'mode' => 'fullscreen',
         'img' => [
             'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
@@ -134,7 +134,7 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
+    'usermenu_header' => true,
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => false,
     'usermenu_desc' => false,
@@ -144,12 +144,6 @@ return [
     |--------------------------------------------------------------------------
     | Layout
     |--------------------------------------------------------------------------
-    |
-    | Here we change the layout of your admin panel.
-    |
-    | For detailed instructions you can look the layout section here:
-    | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Layout-and-Styling-Configuration
-    |
     */
 
     'layout_topnav' => null,
@@ -163,12 +157,6 @@ return [
     |--------------------------------------------------------------------------
     | Authentication Views Classes
     |--------------------------------------------------------------------------
-    |
-    | Here you can change the look and behavior of the authentication views.
-    |
-    | For detailed instructions you can look the auth classes section here:
-    | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Layout-and-Styling-Configuration
-    |
     */
 
     'classes_auth_card' => 'card-outline card-primary',
@@ -182,12 +170,6 @@ return [
     |--------------------------------------------------------------------------
     | Admin Panel Classes
     |--------------------------------------------------------------------------
-    |
-    | Here you can change the look and behavior of the admin panel.
-    |
-    | For detailed instructions you can look the admin panel classes here:
-    | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Layout-and-Styling-Configuration
-    |
     */
 
     'classes_body' => '',
@@ -206,12 +188,6 @@ return [
     |--------------------------------------------------------------------------
     | Sidebar
     |--------------------------------------------------------------------------
-    |
-    | Here we can modify the sidebar of the admin panel.
-    |
-    | For detailed instructions you can look the sidebar section here:
-    | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Layout-and-Styling-Configuration
-    |
     */
 
     'sidebar_mini' => 'lg',
@@ -228,12 +204,6 @@ return [
     |--------------------------------------------------------------------------
     | Control Sidebar (Right Sidebar)
     |--------------------------------------------------------------------------
-    |
-    | Here we can modify the right sidebar aka control sidebar of the admin panel.
-    |
-    | For detailed instructions you can look the right sidebar section here:
-    | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Layout-and-Styling-Configuration
-    |
     */
 
     'right_sidebar' => false,
@@ -248,12 +218,6 @@ return [
     |--------------------------------------------------------------------------
     | URLs
     |--------------------------------------------------------------------------
-    |
-    | Here we can modify the url settings of the admin panel.
-    |
-    | For detailed instructions you can look the urls section here:
-    | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
-    |
     */
 
     'use_route_url' => false,
@@ -270,16 +234,6 @@ return [
     |--------------------------------------------------------------------------
     | Laravel Asset Bundling
     |--------------------------------------------------------------------------
-    |
-    | Here we can enable the Laravel Asset Bundling option for the admin panel.
-    | Currently, the next modes are supported: 'mix', 'vite' and 'vite_js_only'.
-    | When using 'vite_js_only', it's expected that your CSS is imported using
-    | JavaScript. Typically, in your application's 'resources/js/app.js' file.
-    | If you are not using any of these, leave it as 'false'.
-    |
-    | For detailed instructions you can look the asset bundling section here:
-    | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Other-Configuration
-    |
     */
 
     'laravel_asset_bundling' => false,
@@ -290,12 +244,6 @@ return [
     |--------------------------------------------------------------------------
     | Menu Items
     |--------------------------------------------------------------------------
-    |
-    | Here we can modify the sidebar/top navigation of the admin panel.
-    |
-    | For detailed instructions you can look here:
-    | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Menu-Configuration
-    |
     */
 
     'menu' => [
@@ -344,6 +292,13 @@ return [
             'icon' => 'fas fa-fw fa-file-export',
             'can'  => 'role',
             'model' => 'admin',
+        ],
+        ['header' => 'PENGATURAN'],
+        [
+            'text' => 'Log Out',
+            'url'  => 'logout',
+            'icon' => 'fas fa-fw fa-sign-out-alt',
+            'icon_color' => 'red',
         ],
     ],
 
@@ -449,6 +404,43 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'AdminLTE_CDN_Fix' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://code.jquery.com/jquery-3.6.0.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => 'https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => 'https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js',
+                ],
+
+                 [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css',
+                ],
+                                // Global Fix for Burger Menu
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'js/burger.js',
                 ],
             ],
         ],

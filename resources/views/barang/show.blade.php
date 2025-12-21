@@ -12,7 +12,9 @@
             <div class="row">
                 <div class="col-md-4 text-center">
                     @if ($barang->qr_code)
-                        <img src="{{ asset($barang->qr_code) }}" alt="QR Code" class="img-fluid mb-3" style="max-width: 300px;">
+                         <div id="qr-display" class="mb-3" style="max-width: 300px; margin: 0 auto; display: inline-block;">
+                            {!! $qrCodeContent !!}
+                         </div>
                         <br>
                         <a href="{{ asset($barang->qr_code) }}" download="QR-{{ $barang->kode_barang }}.svg" class="btn btn-success"><i class="fas fa-download"></i> Download QR</a>
                         <button onclick="printQR()" class="btn btn-secondary"><i class="fas fa-print"></i> Print QR</button>
@@ -43,6 +45,10 @@
                             <td>{{ $barang->stok_sekarang }}</td>
                         </tr>
                         <tr>
+                            <th>Tanggal</th>
+                            <td>{{ $barang->tanggal }}</td>
+                        </tr>
+                        <tr>
                             <th>Keterangan</th>
                             <td>{{ $barang->keterangan }}</td>
                         </tr>
@@ -55,10 +61,11 @@
 
     <script>
         function printQR() {
+            var qrContent = document.getElementById('qr-display').innerHTML;
             var win = window.open('', '', 'height=500,width=500');
             win.document.write('<html><head><title>Print QR</title>');
             win.document.write('</head><body style="text-align:center;">');
-            win.document.write('<img src="{{ asset($barang->qr_code) }}" style="width:300px;">');
+            win.document.write(qrContent);
             win.document.write('<br><h3>{{ $barang->nama_barang }} ({{ $barang->kode_barang }})</h3>');
             win.document.write('</body></html>');
             win.document.close();

@@ -21,5 +21,18 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+        User::factory()->create([
+            'name'=> 'Admin',
+            'email'=> 'admin@example.com',
+            'password'=> bcrypt ('admin123'),
+            'role' => 'admin',
+        ]);
+                User::factory()->create([
+            'name'=> 'Staff',
+            'email'=> 'staff@example.com',
+            'password'=> bcrypt ('staff123'),
+            'role' => 'petugas',
+        ]);
     }
 }
+// next kita migrate lagi atau mau simple bisa langsung ke localhostnya bisa

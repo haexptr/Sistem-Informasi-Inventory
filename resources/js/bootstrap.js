@@ -1,4 +1,4 @@
-import 'bootstrap';
+// import 'bootstrap'; // Disable Bootstrap 5 to prevent conflict with AdminLTE (Bootstrap 4)
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

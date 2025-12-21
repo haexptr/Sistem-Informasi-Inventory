@@ -14,9 +14,11 @@
                     <h3 class="card-title">Scan QR Code</h3>
                 </div>
                 <div class="card-body text-center">
-                    <div id="reader" width="600px"></div>
+                    <!-- Fix: Style width 100% and min-height to ensure camera area is visible -->
+                    <div id="reader" style="width: 100%; min-height: 300px; background: #eee;"></div>
                     <button id="startScan" class="btn btn-primary mt-3">Mulai Scan Kamera</button>
                     <button id="stopScan" class="btn btn-danger mt-3" style="display:none;">Stop Scan</button>
+                    <p class="mt-2 text-muted text-sm" id="cameraStatus">Pastikan izin kamera aktif & gunakan HTTPS.</p>
                 </div>
             </div>
         </div>
@@ -59,69 +61,88 @@
 @stop
 
 @section('js')
+    <!-- Use local file as requested -->
     <script src="{{ asset('js/html5-qrcode.min.js') }}"></script>
     <script>
+        // DEBUG: Cek apakah library berhasil diload
+        if (typeof Html5Qrcode === 'undefined') {
+            console.error('Library Html5Qrcode GAGAL diload!');
+            alert('Error: Library QR Code tidak terdeteksi.\n\n1. Coba Hard Refresh (Ctrl + F5).\n2. Pastikan file public/js/html5-qrcode.min.js ada dan tidak korup (size sekitar 366kb).');
+        } else {
+            console.log('Library Html5Qrcode BERHASIL diload.');
+        }
+
         $(document).ready(function() {
             $('.select2').select2();
 
-            let html5QrcodeScanner = new Html5Qrcode("reader");
+            let html5QrcodeScanner = null;
             
             $('#startScan').click(function() {
+                $('#cameraStatus').text('Sedang memuat kamera...');
+                
+                // Initialize only when needed
+                if (html5QrcodeScanner === null) {
+                   html5QrcodeScanner = new Html5Qrcode("reader");
+                }
+
                 $('#startScan').hide();
                 $('#stopScan').show();
                 
-                html5QrcodeScanner.start(
-                    { facingMode: "environment" }, 
-                    {
-                        fps: 10,
-                        qrbox: { width: 250, height: 250 }
-                    },
-                    (decodedText, decodedResult) => {
-                        // Handle on success condition with the decoded message.
-                        console.log(`Scan result: ${decodedText}`, decodedResult);
-                        
-                        // Find option with matching data-kode
-                        let found = false;
-                        $('#barang_id option').each(function() {
-                            if ($(this).data('kode') === decodedText) {
-                                $('#barang_id').val($(this).val()).trigger('change');
-                                found = true;
-                                alert('Barang ditemukan: ' + decodedText);
-                                
-                                // Stop scanning after success
-                                stopScanning();
-                                return false;
-                            }
-                        });
-
-                        if (!found) {
-                            alert('Barang dengan kode ' + decodedText + ' tidak ditemukan di database.');
-                        }
-                    },
-                    (errorMessage) => {
-                        // parse error, ignore it.
-                    })
-                .catch((err) => {
-                    // Start failed, handle it.
-                    console.log(err);
+                const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+                
+                // Prefer back camera ("environment")
+                html5QrcodeScanner.start({ facingMode: "environment" }, config, onScanSuccess)
+                .catch(err => {
+                    // ERROR HANDLING: Show alert so user knows WHY it failed
+                    console.error("Error starting scanner", err);
+                    alert("Gagal membuka kamera: " + err + "\n\nPastikan:\n1. Anda menggunakan HTTPS (bukan HTTP)\n2. Anda mengizinkan akses kamera di browser.");
+                    
+                    $('#cameraStatus').text('Gagal: ' + err);
                     $('#startScan').show();
                     $('#stopScan').hide();
                 });
             });
+
+            function onScanSuccess(decodedText, decodedResult) {
+                console.log(`Scan result: ${decodedText}`, decodedResult);
+                
+                // Find option with matching data-kode
+                let found = false;
+                $('#barang_id option').each(function() {
+                    if ($(this).data('kode') === decodedText) {
+                        $('#barang_id').val($(this).val()).trigger('change');
+                        found = true;
+                        
+                        // Audio feedback (optional)
+                        // let beep = new Audio('beep.mp3'); beep.play();
+
+                        alert('Barang ditemukan: ' + decodedText);
+                        
+                        stopScanning();
+                        return false;
+                    }
+                });
+
+                if (!found) {
+                    alert('Barang dengan kode ' + decodedText + ' tidak ditemukan di database.');
+                }
+            }
 
             $('#stopScan').click(function() {
                 stopScanning();
             });
 
             function stopScanning() {
-                html5QrcodeScanner.stop().then((ignore) => {
-                    // QR Code scanning is stopped.
-                    $('#startScan').show();
-                    $('#stopScan').hide();
-                }).catch((err) => {
-                    // Stop failed, handle it.
-                    console.log(err);
-                });
+                if (html5QrcodeScanner) {
+                    html5QrcodeScanner.stop().then((ignore) => {
+                        console.log("Stopped scanning.");
+                        $('#startScan').show();
+                        $('#stopScan').hide();
+                        $('#cameraStatus').text('Kamera berhenti.');
+                    }).catch((err) => {
+                        console.log("Failed to stop", err);
+                    });
+                }
             }
         });
     </script>

@@ -24,6 +24,10 @@
                     <input type="text" name="satuan" class="form-control" placeholder="Contoh: Pcs, Box, Kg" required>
                 </div>
                 <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" name="tanggal" class="form-control">
+                </div>
+                <div class="form-group">
                     <label>Stok Awal</label>
                     <input type="number" name="stok_sekarang" class="form-control" value="0" min="0" required>
                 </div>

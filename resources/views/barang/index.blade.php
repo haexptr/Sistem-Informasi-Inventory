@@ -10,10 +10,19 @@
     <div class="card">
         <div class="card-header">
             <a href="{{ route('barang.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah Barang</a>
+            @if(request('filter') == 'menipis')
+                <a href="{{ route('barang.index') }}" class="btn btn-secondary ml-2"><i class="fas fa-sync"></i> Tampilkan Semua</a>
+            @endif
         </div>
         <div class="card-body">
             @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            @if(request('filter') == 'menipis')
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Mode Filter:</strong> Menampilkan barang dengan stok menipis (kurang dari 10).
+                </div>
             @endif
             <table class="table table-bordered table-striped">
                 <thead>
@@ -24,6 +33,7 @@
                         <th>Kategori</th>
                         <th>Satuan</th>
                         <th>Stok</th>
+                        <th>Tanggal</th>
                         <th>QR Code</th>
                         <th>Aksi</th>
                     </tr>
@@ -37,9 +47,15 @@
                             <td>{{ $item->kategori }}</td>
                             <td>{{ $item->satuan }}</td>
                             <td>{{ $item->stok_sekarang }}</td>
+                            <td>{{ $item->tanggal }}</td>
                             <td>
-                                @if ($item->qr_code)
-                                    <img src="{{ asset($item->qr_code) }}" alt="QR" width="50">
+                                @if ($item->qr_code && file_exists(public_path($item->qr_code)))
+                                    <!-- Embed SVG, forcing size with CSS -->
+                                    <div style="width: 50px; height: 50px; overflow: hidden;">
+                                        {!! str_replace('<svg', '<svg style="width: 100%; height: 100%;"', file_get_contents(public_path($item->qr_code))) !!}
+                                    </div>
+                                @else
+                                    <span class="badge badge-warning">No QR</span>
                                 @endif
                             </td>
                             <td>
